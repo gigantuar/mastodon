@@ -46,12 +46,12 @@ class MediaAttachment < ApplicationRecord
 
   IMAGE_STYLES = {
     original: {
-      pixels: 1_638_400, # 1280x1280px
+      pixels: 16_257_024, # 4032x4032px
       file_geometry_parser: FastGeometryParser,
     },
 
     small: {
-      pixels: 160_000, # 400x400px
+      pixels: 1_048_576, # 1024x1024px
       file_geometry_parser: FastGeometryParser,
       blurhash: BLURHASH_OPTIONS,
     },
@@ -130,8 +130,8 @@ class MediaAttachment < ApplicationRecord
     original: VIDEO_FORMAT,
   }.freeze
 
-  IMAGE_LIMIT = 10.megabytes
-  VIDEO_LIMIT = 40.megabytes
+  IMAGE_LIMIT = 100.megabytes
+  VIDEO_LIMIT = 4000.megabytes
 
   MAX_VIDEO_MATRIX_LIMIT = 2_304_000 # 1920x1200px
   MAX_VIDEO_FRAME_RATE   = 60
@@ -143,7 +143,7 @@ class MediaAttachment < ApplicationRecord
   has_attached_file :file,
                     styles: ->(f) { file_styles f },
                     processors: ->(f) { file_processors f },
-                    convert_options: { all: '-quality 90 -strip +set modify-date +set create-date' }
+                    convert_options: { all: '-quality 99 -strip +set modify-date +set create-date' }
 
   validates_attachment_content_type :file, content_type: IMAGE_MIME_TYPES + VIDEO_MIME_TYPES + AUDIO_MIME_TYPES
   validates_attachment_size :file, less_than: IMAGE_LIMIT, unless: :larger_media_format?
